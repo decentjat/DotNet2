@@ -10,6 +10,16 @@ jobs:
     runs-on: windows-latest  # ASP.NET 4.8 requires Windows environment
 
     steps:
+   # Ensure the release directory exists
+    - name: Ensure Release Directory Exists
+      run: |
+        $releaseDir = "D:\a\DotNet\DotNet\release"
+        if (!(Test-Path -Path $releaseDir)) {
+            New-Item -ItemType Directory -Path $releaseDir
+            echo "Release directory created at $releaseDir."
+        } else {
+            echo "Release directory already exists at $releaseDir."
+        }
     - name: Checkout code
       uses: actions/checkout@v2
 
