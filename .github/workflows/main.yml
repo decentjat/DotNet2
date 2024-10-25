@@ -31,12 +31,12 @@ jobs:
   
    
     - name: List files in output directory  # Check if files are present
-      run: dir ASPDotNetSampleWebapp\bin\Release\net48
+      run: dir .\ASPDotNetSampleWebapp\bin\Release\net48
 
     - name: Publish the project
       run: |
         mkdir publish
-        xcopy /s /e /y /i "ASPDotNetSampleWebapp\bin\Release\net48\*" "publish"
+        xcopy /s /e /y /i ".\ASPDotNetSampleWebapp\bin\Release\net48\*" "publish"
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
