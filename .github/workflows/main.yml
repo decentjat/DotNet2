@@ -20,12 +20,12 @@ jobs:
       run: nuget restore
 
     - name: Build the solution
-      run: msbuild YourSolution.sln /p:Configuration=Release
+      run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release
 
     - name: Publish the project
       run: |
         mkdir publish
-        xcopy /s /e /y /i "YourProjectFolder\bin\Release\net48\*" "publish"
+        xcopy /s /e /y /i "ASPDotNetSampleWebapp\bin\Release\net48\*" "publish"
       
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
