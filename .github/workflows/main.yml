@@ -24,22 +24,13 @@ jobs:
       
    
     - name: List files in output directory  # Check if files are present
-      run: dir "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\ASPDotNetSampleWebapp\bin\Release\net48" || echo "Output directory does not exist."
-
-        
+      run: dir ASPDotNetSampleWebapp\bin\Release\net48
 
     - name: Publish the project
       run: |
-        OUTPUT_DIR="D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\net48"
         mkdir publish
-        if (Test-Path $OUTPUT_DIR) {
-            xcopy /s /e /y /i "$OUTPUT_DIR\*" "publish"
-        } else {
-            echo "No files to copy from output directory."
-            exit 1  # Exit with error if no files to copy
-        }
+        xcopy /s /e /y /i "ASPDotNetSampleWebapp\bin\Release\net48\*" "publish"
 
-      
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
       with:
