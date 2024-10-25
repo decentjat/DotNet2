@@ -25,19 +25,25 @@ jobs:
    
     - name: List files in output directory  # Check if files are present
       run: |
-        if (Test-Path "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\net48") {
-            dir "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\net48"
-        } elseif (Test-Path "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release") {
-            dir "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release"
+        OUTPUT_DIR="D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\net48"
+        if (Test-Path $OUTPUT_DIR) {
+            dir $OUTPUT_DIR
         } else {
             echo "Output directory does not exist."
+            exit 1  # Exit with error if the directory does not exist
         }
- 
-   
+
     - name: Publish the project
       run: |
+        OUTPUT_DIR="D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\net48"
         mkdir publish
-        xcopy /s /e /y /i "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\net48\*" "publish" || xcopy /s /e /y /i "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\*" "publish" || echo "No files to copy."
+        if (Test-Path $OUTPUT_DIR) {
+            xcopy /s /e /y /i "$OUTPUT_DIR\*" "publish"
+        } else {
+            echo "No files to copy from output directory."
+            exit 1  # Exit with error if no files to copy
+        }
+
       
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
