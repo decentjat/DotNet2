@@ -17,11 +17,14 @@ jobs:
       uses: microsoft/setup-msbuild@v1
 
     - name: Restore NuGet packages
-      run: nuget restore
+      run: nuget restore ASPDotNetSampleWebapp.sln
 
     - name: Build the solution
       run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release
-
+      
+    - name: List files in output directory  # Check if files are present
+      run: dir ASPDotNetSampleWebapp\bin\Release\net48
+      
     - name: Publish the project
       run: |
         mkdir publish
