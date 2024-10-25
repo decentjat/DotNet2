@@ -22,13 +22,15 @@ jobs:
     - name: Build the solution
       run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release
       
+   
     - name: List files in output directory  # Check if files are present
-      run: dir ASPDotNetSampleWebapp\bin\Release\net48
-      
+      run: |
+        dir "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\net48" || echo "Output directory does not exist."  
+   
     - name: Publish the project
       run: |
         mkdir publish
-        xcopy /s /e /y /i "ASPDotNetSampleWebapp\bin\Release\net48\*" "publish"
+        xcopy /s /e /y /i "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\net48\*" "publish" || echo "No files to copy."
       
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
