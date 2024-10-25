@@ -25,7 +25,14 @@ jobs:
    
     - name: List files in output directory  # Check if files are present
       run: |
-        dir "D:\Project\DotNet\ASPDotNetSampleWebapp\bin\Release\net48" || echo "Output directory does not exist."  
+        if (Test-Path "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\net48") {
+            dir "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\net48"
+        } elseif (Test-Path "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release") {
+            dir "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release"
+        } else {
+            echo "Output directory does not exist."
+        }
+ 
    
     - name: Publish the project
       run: |
