@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    environment {
+        dotnet = 'C:\\Program Files\\dotnet\\dotnet.exe'
+    }
+    stages {
+        stage('Checkout Stage') {
+            steps {
+                git credentialsId: '351b3dfd-e507-4547-a3b8-a25bdef62d09', url: 'https://github.com/iamcknitin/DNH-CI-CD.git', branch: 'main'
+            }
+        }
+        stage('Build Stage') {
+            steps {
+                bat 'E:\\CI-CD\\DNH-CI-CD\\DNH2015.sln --configuration Release'
+            }
+        }
+        stage("Release Stage") {
+            steps {
+                bat 'dotnet build E:\\CI-CD\\DNH-CI-CD\\DNH2015.sln /p:PublishProfile=" E:\\CI-CD\\DNH-CI-CD\\Mindcracker\\App_Data\\PublishProfiles\\Jenkins-CI-CD-Publish.pubxml" /p:Platform="Any CPU" /p:DeployOnBuild=true /m'
+            }
+        }
+        stage('Deploy Stage') {
+            steps {
+                //Deploy application on IIS
+                bat 'net stop "w3svc"'
+                bat '"C:\\Program Files (x86)\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe" -verb:sync -source:package="E:\\CI-CD\\DNH-CI-CD\\DNH_Publish\\DNHLocalJenkinsBuild.zip" -dest:auto -setParam:"IIS Web Application Name"="Demo.Web" -skip:objectName=filePath,absolutePath=".\\\\PackagDemoeTmp\\\\Web.config$" -enableRule:DoNotDelete -allowUntrusted=true'
+                bat 'net start "w3svc"'
+            }
+        }
+    }
+}
