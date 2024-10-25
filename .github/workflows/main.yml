@@ -43,7 +43,7 @@ jobs:
     - name: Check for Output Directory
       run: |
           echo "Checking for Release directory in output path..."
-          $outputDir = ".\ASPDotNetSampleWebapp\bin\Release"
+          $outputDir = "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\ASPDotNetSampleWebapp"
           if (Test-Path -Path $outputDir) {
               echo "Release directory exists at $outputDir."
           } else {
