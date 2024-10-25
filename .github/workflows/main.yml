@@ -1,0 +1,34 @@
+name: Build and Deploy ASP.NET 4.8 Application
+
+on:
+  push:
+    branches:
+      - main  # Replace with your branch name
+
+jobs:
+  build:
+    runs-on: windows-latest  # ASP.NET 4.8 requires Windows environment
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Restore NuGet packages
+      run: nuget restore
+
+    - name: Build the solution
+      run: msbuild YourSolution.sln /p:Configuration=Release
+
+    - name: Publish the project
+      run: |
+        mkdir publish
+        xcopy /s /e /y /i "YourProjectFolder\bin\Release\net48\*" "publish"
+      
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: aspnet_app
+        path: publish
