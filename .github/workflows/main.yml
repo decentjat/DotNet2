@@ -28,7 +28,15 @@ jobs:
           pwd
           echo "Files in current directory:"
           dir
-  
+    - name: Check for Output Directory
+      run: |
+          echo "Checking for Release directory..."
+          if (Test-Path ".\ASPDotNetSampleWebapp\bin\Release") {
+              echo "Release directory exists."
+          } else {
+              echo "Release directory does NOT exist. Please check the build step for errors."
+              exit 1  # Exit with error if the directory does not exist
+          }
 
   
    
