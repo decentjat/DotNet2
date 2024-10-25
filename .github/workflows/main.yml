@@ -21,7 +21,14 @@ jobs:
 
     - name: Build the solution
       run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release
-      
+    
+    - name: Show working directory for debugging
+      run: |
+          echo "Current directory:"
+          pwd
+          echo "Files in current directory:"
+          dir
+  
    
     - name: List files in output directory  # Check if files are present
       run: dir ASPDotNetSampleWebapp\bin\Release\net48
