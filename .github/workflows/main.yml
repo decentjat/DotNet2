@@ -37,7 +37,7 @@ jobs:
     - name: Publish the project
       run: |
         mkdir publish
-        xcopy /s /e /y /i "D:\Project\DotNet\ASPDotNetSampleWebapp\bin\Release\net48\*" "publish" || echo "No files to copy."
+        xcopy /s /e /y /i "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\net48\*" "publish" || xcopy /s /e /y /i "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\*" "publish" || echo "No files to copy."
       
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v3
