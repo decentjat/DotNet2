@@ -45,4 +45,10 @@ jobs:
           } else {
               Write-Output "Output directory does not exist: $outputDir"
               exit 1
-          }
+
+      # Upload the build output as an artifact
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ASPDotNetSampleWebapp-Build
+          path: ${{ github.workspace }}/ASPDotNetSampleWebapp/bin/Release
