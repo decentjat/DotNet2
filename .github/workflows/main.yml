@@ -28,16 +28,17 @@ jobs:
 
       # List all files in workspace to debug output location
       - name: List all files in workspace
+        shell: pwsh
         run: |
-          echo "Listing all files in workspace for debugging:"
-          dir /s /b
+          $workspace = "${{ github.workspace }}"
+          Write-Output "Listing all files in workspace for debugging:"
+          Get-ChildItem -Path $workspace -Recurse
 
       # Check if the output directory exists
       - name: Check Output Directory
         shell: pwsh
         run: |
-          $workspace = "${{ github.workspace }}"
-          $outputDir = Join-Path -Path $workspace -ChildPath "ASPDotNetSampleWebapp/bin/Release"
+          $outputDir = Join-Path -Path "${{ github.workspace }}" -ChildPath "ASPDotNetSampleWebapp/bin/Release"
           if (Test-Path $outputDir) {
               Write-Output "Output directory exists: $outputDir"
               Get-ChildItem $outputDir
