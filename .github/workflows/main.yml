@@ -37,6 +37,18 @@ jobs:
       - name: Build the solution
         run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release /v:detailed
 
+      # Check output directory contents
+      - name: Check Output Directory
+        run: |
+          $outputDir = "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release"
+          if (Test-Path $outputDir) {
+              echo "Output directory exists: $outputDir"
+              Get-ChildItem $outputDir
+          } else {
+              echo "Output directory does not exist: $outputDir"
+              exit 1
+          }
+
       # Publish the project to the output directory
       - name: Publish the project
         run: |
