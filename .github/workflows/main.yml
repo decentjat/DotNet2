@@ -10,39 +10,47 @@ jobs:
     runs-on: windows-latest  # ASP.NET 4.8 requires Windows environment
 
     steps:
-   # Ensure the release directory exists
-    - name: Ensure Release Directory Exists
-      run: |
-        $releaseDir = "D:\a\DotNet\DotNet\release"
-        if (!(Test-Path -Path $releaseDir)) {
-            New-Item -ItemType Directory -Path $releaseDir
-            echo "Release directory created at $releaseDir."
-        } else {
-            echo "Release directory already exists at $releaseDir."
-        }
-    - name: Checkout code
-      uses: actions/checkout@v2
+      # Ensure the release directory exists
+      - name: Ensure Release Directory Exists
+        run: |
+          $releaseDir = "D:\a\DotNet\DotNet\release"
+          if (!(Test-Path -Path $releaseDir)) {
+              New-Item -ItemType Directory -Path $releaseDir
+              echo "Release directory created at $releaseDir."
+          } else {
+              echo "Release directory already exists at $releaseDir."
+          }
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Restore NuGet packages
-      run: nuget restore ASPDotNetSampleWebapp.sln
+      # Setup MSBuild
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
 
-    - name: Build the solution
-      run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release
-    
-   
+      # Restore NuGet packages
+      - name: Restore NuGet packages
+        run: nuget restore ASPDotNetSampleWebapp.sln
 
-    # Publish the project
-    - name: Publish the project
-      run: |
-        mkdir publish
-        xcopy /s /e /y /i "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\ASPDotNetSampleWebapp\*" "publish"
+      # Build the solution
+      - name: Build the solution
+        run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release
 
-    # Upload Build Artifact
-    - name: Upload Build Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: aspnet_app
-        path: publish
+      # Publish the project to the output directory
+      - name: Publish the project
+        run: |
+          # Create a publish directory
+          $publishDir = "D:\a\DotNet\DotNet\release\publish"
+          mkdir $publishDir
+          
+          # Copy files from the build output to the publish directory
+          xcopy "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\*" "$publishDir" /s /e /y /i
+          echo "Published files copied to $publishDir"
+
+      # Upload Build Artifact
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: aspnet_app
+          path: D:\a\DotNet\DotNet\release\publish
