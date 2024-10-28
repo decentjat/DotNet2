@@ -10,17 +10,6 @@ jobs:
     runs-on: windows-latest  # ASP.NET 4.8 requires Windows environment
 
     steps:
-      # Ensure the release directory exists
-      - name: Ensure Release Directory Exists
-        run: |
-          $releaseDir = "D:\a\DotNet\DotNet\release"
-          if (!(Test-Path -Path $releaseDir)) {
-              New-Item -ItemType Directory -Path $releaseDir
-              echo "Release directory created at $releaseDir."
-          } else {
-              echo "Release directory already exists at $releaseDir."
-          }
-
       # Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
@@ -37,7 +26,7 @@ jobs:
       - name: Build the solution
         run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release /v:detailed
 
-      # Check output directory contents
+      # Check if the output directory exists
       - name: Check Output Directory
         run: |
           $outputDir = "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release"
@@ -48,29 +37,3 @@ jobs:
               echo "Output directory does not exist: $outputDir"
               exit 1
           }
-
-      # Publish the project to the output directory
-      - name: Publish the project
-        run: |
-          # Create a publish directory
-          $publishDir = "D:\a\DotNet\DotNet\release\publish"
-          mkdir $publishDir
-          
-          # Check the output directory before copying files
-          $outputDir = "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release"
-          if (Test-Path $outputDir) {
-              echo "Output directory exists: $outputDir"
-              # Copy files from the build output to the publish directory
-              xcopy "$outputDir\*" "$publishDir" /s /e /y /i
-              echo "Published files copied to $publishDir"
-          } else {
-              echo "Output directory does not exist: $outputDir"
-              exit 1
-          }
-
-      # Upload Build Artifact
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: aspnet_app
-          path: D:\a\DotNet\DotNet\release\publish
