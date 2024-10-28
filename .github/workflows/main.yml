@@ -33,9 +33,9 @@ jobs:
       - name: Restore NuGet packages
         run: nuget restore ASPDotNetSampleWebapp.sln
 
-      # Build the solution
+      # Build the solution with detailed logging
       - name: Build the solution
-        run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release
+        run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release /v:detailed
 
       # Publish the project to the output directory
       - name: Publish the project
@@ -44,9 +44,17 @@ jobs:
           $publishDir = "D:\a\DotNet\DotNet\release\publish"
           mkdir $publishDir
           
-          # Copy files from the build output to the publish directory
-          xcopy "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release\*" "$publishDir" /s /e /y /i
-          echo "Published files copied to $publishDir"
+          # Check the output directory before copying files
+          $outputDir = "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release"
+          if (Test-Path $outputDir) {
+              echo "Output directory exists: $outputDir"
+              # Copy files from the build output to the publish directory
+              xcopy "$outputDir\*" "$publishDir" /s /e /y /i
+              echo "Published files copied to $publishDir"
+          } else {
+              echo "Output directory does not exist: $outputDir"
+              exit 1
+          }
 
       # Upload Build Artifact
       - name: Upload Build Artifact
