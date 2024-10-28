@@ -24,7 +24,13 @@ jobs:
 
       # Build the solution with detailed logging
       - name: Build the solution
-        run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release /v:detailed
+        run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release /p:OutputPath="bin\Release" /v:detailed
+
+      # List all files in workspace to debug output location
+      - name: List all files in workspace
+        run: |
+          echo "Listing all files in workspace for debugging:"
+          dir /s /b
 
       # Check if the output directory exists
       - name: Check Output Directory
