@@ -26,14 +26,16 @@ jobs:
       - name: Build the solution
         run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release /v:detailed
 
-      #Check if the output directory exists
+      # Check if the output directory exists
       - name: Check Output Directory
+        shell: pwsh
         run: |
-          $outputDir = "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release"
+          $workspace = "${{ github.workspace }}"
+          $outputDir = Join-Path -Path $workspace -ChildPath "ASPDotNetSampleWebapp/bin/Release"
           if (Test-Path $outputDir) {
-              echo "Output directory exists: $outputDir"
+              Write-Output "Output directory exists: $outputDir"
               Get-ChildItem $outputDir
           } else {
-              echo "Output directory does not exist: $outputDir"
+              Write-Output "Output directory does not exist: $outputDir"
               exit 1
           }
