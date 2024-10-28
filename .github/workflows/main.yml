@@ -26,7 +26,7 @@ jobs:
       - name: Build the solution
         run: msbuild ASPDotNetSampleWebapp.sln /p:Configuration=Release /v:detailed
 
-      # Check if the output directory exists
+      #Check if the output directory exists
       - name: Check Output Directory
         run: |
           $outputDir = "D:\a\DotNet\DotNet\ASPDotNetSampleWebapp\bin\Release"
